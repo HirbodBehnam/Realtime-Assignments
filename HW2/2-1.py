@@ -80,7 +80,7 @@ for t in range(1000):
         to_schedule_task.start_time = t
     to_schedule_task.computation_left -= 1 # compute
     if to_schedule_task.computation_left == 0:
-        print(f"Scheduling task {to_schedule_task.id} in T={t}")
+        print(f"Scheduling task {to_schedule_task.id} finished in T={t+1}")
         to_schedule_task.finish_time = t + 1
     
 # Print new tasks
