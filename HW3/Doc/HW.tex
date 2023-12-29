@@ -1,0 +1,111 @@
+% !TEX program = xelatex
+\documentclass[]{article}
+\usepackage{commons/course}
+
+\begin{document}
+\printheader
+
+در این داکیومنت به تحلیل کدی که برای قسمت سوال زدیم می‌پردازیم.
+در ابتدا چندین کلاس تعریف شده‌اند که نشان‌دهنده‌ی هر نوع تسک پریودیک یا آپریودیک هستند.
+هر تسک یک
+\verb|id|
+نیز دارد که صرفا برای نشان دادن آن استفاده می‌شود.
+هر تسک آپریودیک یک زمان ریلیز دارد و همچنین یک عدد دارد که نشان می‌دهد که چه قدر دیگر مانده
+است که کارش تمام شود. در ابتدا این عدد برابر همان
+$C$
+است. برای تسک‌های پریودیک نیز همین متغیر‌ها تعریف می‌شوند فقط یک متغیر دیگر به اسم
+\verb|interval|
+نیز داریم که نشان می‌دهد که پریود این تسک چه قدر است.
+
+در ادامه یک کلاس به اسم
+\lr{PoolingServer}
+تعریف می‌کنیم که عملا همان کلاسی است که تمامی مشخصات سرور را دارد. یک تابع نیز برای این
+سرور تعریف می‌کنیم که نشان می‌دهد که آیا سیستم قابل زمانبندی است یا خیر که به کمک
+فرمول اسلاید ۵ صفحه‌ی ۱۳ کار می‌کند.
+
+در ادامه نیز یک تابع تعریف می‌کنیم که صرفا فایل جیسون ورودی برنامه را می‌خواند و آن را تبدیل
+به یک
+\lr{PoolingServer}
+می‌کند.
+
+در نهایت نیز تابع زمانبندی خودمان را می‌نویسیم. سعی می‌کنم که در اینجا کاری که کردم را به صورت خلاصه
+توضیح دهم. در ابتدا متغیری تعریف شده است به اسم
+\lr{handling aperiodic tasks}
+که در صورتی که برابر
+\verb|True|
+باشد نشان می‌دهد که درحال حاضر در حال انجام دادن تسک‌های آپریودیک هستیم و آن‌ها می‌توانند که
+تسک‌های پریودیک را
+\lr{preempt}
+بکنند. در ادامه متغیر
+\lr{current time}
+را که زمان فعلی شبیه سازی را نشان می‌دهد را از یک تا زمان مورد نظر جلو می‌بریم.
+در هر لحظه از زمان در ابتدا در صورتی که زمان پریود یکی از تسک‌ها بود زمان
+\lr{remaining computaion}
+آن را برابر
+$C$
+قرار می‌دهیم و با این کار عملا مشخص می‌کنیم که این تسک می‌تواند زمان بندی شود.
+در ادامه در صورتی که در
+\lr{interval}
+خود سرور بودیم نیز چک می‌کنیم که آیا اصلا تسک آپریودیکی وجود دارد که قابل زمانبندی باشد
+یا خیر. در این صورت متغیر
+\lr{handling aperiodic tasks}
+را برابر
+\verb|True|
+قرار می‌دهیم و مقدار
+\lr{server capacity}
+مانده را همان
+\lr{server capacity}
+اولیه قرار می‌دهیم که تسک‌ها از آن استفاده کنند.
+
+حال زمانبندی واقعی را شروع می‌کنیم. در ابتدا در صورتی که تسک‌هایی با پریود کمتر از
+\lr{server}
+وجود داشته باشند که زمان بندی نشده باشد به خاطر
+\lr{RM}
+بودن سرور آن‌ها را زمان بندی می‌کنیم. در ادامه سراغ تسک‌های
+آپریودیک می‌رویم در صورتی که متغیر
+\lr{handling aperiodic tasks}
+\verb|True|
+باشد. در صورتی که تسک‌های آپریودیک تمام شده بودند هم این متغیر را
+\verb|False|
+می‌کنیم.
+در ادامه نیز در صورتی که هیچ چیزی تا اینجا زمان بندی نشده بود تسک‌هایی با پریود بیشتر از سرور
+را زمانبندی می‌کنیم.
+
+در خود بدنه‌ی اصلی اسکریپت نیز اول چک می‌کنیم که آیا تسک‌ها قابلیت زمان بندی شدن را دارند یا خیر.
+در صورتی که قابلیت زمان بندی شدن را داشتند آن‌ها را زمانبندی می‌کنیم و در غیر این صورت کلا از برنامه
+خارج می‌شویم.
+
+برای مثال نیز من دقیقا مثال اسلاید‌ها را آوردم. اما با این اعداد تست زمانبندی فیل می‌شود چرا
+که کلا این فرمول بد بینانه است. با این حال من زمان بندی را گفتم که انجام بده و نتیجه به صورت
+زیر است:
+\begin{latin}
+\begin{lstlisting}
+Did one unit of periodic task 5 in T=0
+Did one unit of periodic task 6 in T=1
+Did one unit of periodic task 6 in T=2
+Did one unit of periodic task 5 in T=4
+Starting to handle aperiodic tasks in T=5
+Did one unit of aperiodic task 1 in T=5. Server has 1 units of capacity left
+Did one unit of aperiodic task 1 in T=6. Server has 0 units of capacity left
+Did one unit of periodic task 6 in T=7
+Did one unit of periodic task 5 in T=8
+Did one unit of periodic task 6 in T=9
+Starting to handle aperiodic tasks in T=10
+Did one unit of aperiodic task 2 in T=10. Server has 1 units of capacity left
+Did one unit of periodic task 5 in T=12
+Did one unit of periodic task 6 in T=13
+Did one unit of periodic task 6 in T=14
+Starting to handle aperiodic tasks in T=15
+Did one unit of aperiodic task 3 in T=15. Server has 1 units of capacity left
+Did one unit of periodic task 5 in T=16
+Did one unit of aperiodic task 3 in T=17. Server has 0 units of capacity left
+Did one unit of periodic task 6 in T=18
+Did one unit of periodic task 6 in T=19
+Starting to handle aperiodic tasks in T=20
+Did one unit of periodic task 5 in T=20
+Did one unit of aperiodic task 4 in T=21. Server has 1 units of capacity left
+Did one unit of periodic task 5 in T=24
+\end{lstlisting}
+\end{latin}
+همان طور که مشاهده می‌کنید بازه‌های زمان بندی مانند اسلاید است.
+\end{document}

@@ -1,0 +1,38 @@
+{
+    "server_capacity": 2,
+    "server_period": 5,
+    "aperiodic_tasks": [
+        {
+            "id": 1,
+            "release_time": 2,
+            "computation_time": 2
+        },
+        {
+            "id": 2,
+            "release_time": 8,
+            "computation_time": 1
+        },
+        {
+            "id": 3,
+            "release_time": 12,
+            "computation_time": 2
+        },
+        {
+            "id": 4,
+            "release_time": 19,
+            "computation_time": 1
+        }
+    ],
+    "periodic_tasks": [
+        {
+            "id": 5,
+            "computation_time": 1,
+            "interval": 4
+        },
+        {
+            "id": 6,
+            "computation_time": 2,
+            "interval": 6
+        }
+    ]
+}
